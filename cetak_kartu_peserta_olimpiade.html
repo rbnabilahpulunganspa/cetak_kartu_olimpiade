@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generator ID Card Olimpiade</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+      color: #333;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #1565c0;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    label {
+      font-weight: bold;
+      color: #1565c0;
+    }
+    input, select {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    button {
+      padding: 12px;
+      background: #1565c0;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0d47a1;
+    }
+    .id-card {
+      width: 350px;
+      height: 500px;
+      margin: 20px auto;
+      background: linear-gradient(to bottom, #42a5f5, #e3f2fd);
+      color: #333;
+      border-radius: 15px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+    .id-card:before, .id-card:after {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      z-index: 0;
+    }
+    .id-card:before {
+      top: -50px;
+      left: -50px;
+    }
+    .id-card:after {
+      bottom: -50px;
+      right: -50px;
+    }
+    .id-card .header {
+      text-align: center;
+      z-index: 1;
+    }
+    .id-card .header img {
+      width: 100px;
+      height: 50px;
+    }
+    .id-card .header h2 {
+      margin: 10px 0 0;
+      color: #fff;
+      font-size: 16px;
+    }
+    .id-card .details {
+      z-index: 1;
+      width: 100%;
+      text-align: center;
+      color: #333;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    .id-card .details p {
+      margin: 5px 0;
+    }
+    .id-card .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #fff;
+      z-index: 1;
+    }
+    .id-card .footer small {
+      color : black;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cetak Kartu Peserta Olimpiade Tingkat SD</h1>
+    <h1>DARUL HASAN</h1>
+    <form id="idCardForm">
+      <label for="nomor">Nomor Peserta:</label>
+      <input type="text" id="nomor" required>
+      
+      <label for="nama">Nama Peserta:</label>
+      <input type="text" id="nama" required>
+      
+      <label for="kelas">Kelas:</label>
+      <input type="text" id="kelas" required>
+      
+      <label for="jenis">Kategori Olimpiade:</label>
+      <select id="jenis" required>
+        <option value="" disabled selected>Pilih Jenis Olimpiade</option>
+        <option value="Matematika">Matematika</option>
+        <option value="IPS">IPS</option>
+        <option value="IPA">IPA</option>
+        <option value="PAI">PAI</option>
+	<option value="Adzan">Adzan</option>
+	<option value="Tahfidz">Tahfidz</option>
+      </select>
+      
+      <button type="button" onclick="generateIdCard()">Buat ID Card</button>
+    </form>
+    
+    <div id="idCardPreview"></div>
+    <button id="downloadBtn" style="display:none;" onclick="downloadPdf()">Download ID Card</button>
+  </div>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script>
+    let generatedCard = null;
+
+    function generateIdCard() {
+      const nomor = document.getElementById('nomor').value;
+      const nama = document.getElementById('nama').value;
+      const kelas = document.getElementById('kelas').value;
+      const jenis = document.getElementById('jenis').value;
+
+      if (!nomor || !nama || !kelas || !jenis) {
+        alert('Mohon lengkapi semua data!');
+        return;
+      }
+
+      const preview = document.getElementById('idCardPreview');
+      preview.innerHTML = `
+        <div class="id-card" id="generatedCard">
+          <div class="header">
+            <img src="darul.png" alt="Logo">
+            <h1>DARUL HASAN</h1>
+            <h1>OLIMPIAD</h1>
+	    <h2>Tingkat SD/MI se-Tabagsel</h2>
+          </div>
+          <div class="details">
+            <p><strong>Nomor:</strong> ${nomor}</p>
+            <p><strong>Nama:</strong> ${nama}</p>
+            <p><strong>Kelas:</strong> ${kelas}</p>
+            <p><strong>Kategori Lomba:</strong> ${jenis}</p>
+          </div>
+          <div class="footer">
+            <small>unggul</small>
+            <small>berkarakter</small>
+	    <small>berdaya saing</small>
+          </div>
+        </div>
+      `;
+
+      generatedCard = document.getElementById('generatedCard');
+      document.getElementById('downloadBtn').style.display = 'block';
+    }
+
+    function downloadPdf() {
+      if (!generatedCard) {
+        alert('Buat ID Card terlebih dahulu!');
+        return;
+      }
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: [350, 500],
+      });
+
+      doc.html(generatedCard, {
+        callback: function (doc) {
+          const nama = document.getElementById('nama').value;
+          doc.save(`ID_Card_${nama}.pdf`);
+        },
+        x: 0,
+        y: 0,
+      });
+    }
+  </script>
+</body>
+</html>
